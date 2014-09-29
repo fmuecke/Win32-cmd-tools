@@ -1,0 +1,4 @@
+stopwatch/bin/
+*/obj/
+*.pdb
+*.csproj.user
