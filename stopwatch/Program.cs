@@ -6,28 +6,31 @@
     using System.Linq;
     using System.Text;
     using System.Text.RegularExpressions;
+
     using System.Threading.Tasks;
-    
-    class Program
+
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             if (args.Length < 2)
             {
                 System.Console.WriteLine("Usage: stopwatch.exe <start|stop> <id>");
+                System.Console.WriteLine("\nSource code available from: http://bitbucket.org/fmuecke/win32-cmd-tools");
                 System.Environment.ExitCode = 1;
                 return;
             }
             string cmd = args[0];
             string id = args[1];
 
-            if (!Regex.IsMatch(id, "[A–Za–z0–9 _-]+"))
+            var rx = new Regex("[a-zA-Z0-9_-]+");
+            if (!rx.IsMatch(id))
             {
                 System.Environment.ExitCode = (int)FM.Win32.ErrorCode.ERROR_INVALID_PARAMETER;
                 Console.Error.WriteLine("Parameter id is invalid. Allowed chars are: A-Za-z0-9_-");
                 return;
             }
-            
+
             string file = string.Format("{0}\\~StopWatch-{1}.tmp", Path.GetTempPath(), id);
 
             if (args[0] == "start")
@@ -55,12 +58,10 @@
                 if (duration.TotalMinutes >= 60)
                 {
                     timeStr = string.Format("{0}h {1}m {2}s", (int)duration.TotalHours, (int)duration.TotalMinutes, duration.Seconds);
-
                 }
                 else if (duration.TotalSeconds >= 60)
                 {
                     timeStr = string.Format("{0}m {1}s", (int)duration.TotalMinutes, duration.Seconds);
-
                 }
                 else
                 {
@@ -72,7 +73,6 @@
             }
             else
             {
-
             }
         }
     }
