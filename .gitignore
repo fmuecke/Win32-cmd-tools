@@ -1,4 +1,5 @@
-stopwatch/bin/
+*/bin/Debug/
+*/bin/Release/
 */obj/
 *.pdb
 *.csproj.user
