@@ -54,21 +54,7 @@
                 var timeStarted = DateTime.Parse(text);
                 timeStarted = DateTime.SpecifyKind(timeStarted, DateTimeKind.Utc);
                 var duration = DateTime.UtcNow - timeStarted;
-                string timeStr;
-                if (duration.TotalMinutes >= 60)
-                {
-                    timeStr = string.Format("{0}h {1}m {2}s", (int)duration.TotalHours, (int)duration.TotalMinutes, duration.Seconds);
-                }
-                else if (duration.TotalSeconds >= 60)
-                {
-                    timeStr = string.Format("{0}m {1}s", (int)duration.TotalMinutes, duration.Seconds);
-                }
-                else
-                {
-                    timeStr = string.Format("{0}s", duration.Seconds);
-                }
-
-                Console.WriteLine("{0} took {1}", id, timeStr);
+                Console.WriteLine("{0}: Time Elapsed {1:hh\\:mm\\:ss}", id, duration);
                 File.Delete(file);
             }
             else
