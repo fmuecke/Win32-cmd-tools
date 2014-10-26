@@ -15,13 +15,21 @@
         {
             if (args.Length < 2)
             {
-                System.Console.WriteLine("Usage: stopwatch.exe <start|stop> <id>");
+                System.Console.WriteLine("Usage: stopwatch.exe <start|stop> <id> <format>\n");
+                System.Console.WriteLine("       id may consist of 'a-zA-Z0-9_-'; \\ will be replaced with '_'. ");
+                System.Console.WriteLine("       default format is \"{0}: Time Elapsed {1}\"");
                 System.Console.WriteLine("\nSource code available from: http://bitbucket.org/fmuecke/win32-cmd-tools");
                 System.Environment.ExitCode = 1;
                 return;
             }
             string cmd = args[0];
             string id = args[1];
+            string format = "{0}: Time Elapsed {1}";
+            if (args.Length >= 3)
+            {
+                format = args[2].Trim('\"');
+            }
+            id = id.Replace('\\', '_');
 
             var rx = new Regex("[a-zA-Z0-9_-]+");
             if (!rx.IsMatch(id))
@@ -53,8 +61,18 @@
 
                 var timeStarted = DateTime.Parse(text);
                 timeStarted = DateTime.SpecifyKind(timeStarted, DateTimeKind.Utc);
-                var duration = DateTime.UtcNow - timeStarted;
-                Console.WriteLine("{0}: Time Elapsed {1:hh\\:mm\\:ss}", id, duration);
+                var durationStr = (DateTime.UtcNow - timeStarted).ToString("hh\\:mm\\:ss");
+                //Console.WriteLine("{0}: Time Elapsed {1:hh\\:mm\\:ss}", id, duration);
+                try
+                {
+                    Console.WriteLine(format, id, durationStr);
+                }
+                catch (System.FormatException e)
+                {
+                    Console.Error.WriteLine(e.Message);
+                    System.Environment.Exit((int)FM.Win32.ErrorCode.ERROR_INVALID_PARAMETER);
+                }
+
                 File.Delete(file);
             }
             else
