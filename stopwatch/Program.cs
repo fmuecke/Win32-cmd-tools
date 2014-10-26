@@ -23,13 +23,14 @@
                 return;
             }
             string cmd = args[0];
-            string id = args[1];
+            string id = args[1].Trim('\"');
             string format = "{0}: Time Elapsed {1}";
             if (args.Length >= 3)
             {
                 format = args[2].Trim('\"');
             }
             id = id.Replace('\\', '_');
+            id = id.Replace(' ', '_');
 
             var rx = new Regex("[a-zA-Z0-9_-]+");
             if (!rx.IsMatch(id))
